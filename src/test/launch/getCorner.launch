@@ -1,0 +1,8 @@
+<launch>
+    <param name="resolution" value="0.5" />
+    <param name="Map2MatRatio" value="0.01" />
+    <param name="input_topic" value="/cloud_registered" />
+    <param name="z_min" value="0.05" />
+    <param name="z_max" value="1.0" />
+    <node name="test" pkg="test" type="testPCL" output="screen"/>
+</launch>
