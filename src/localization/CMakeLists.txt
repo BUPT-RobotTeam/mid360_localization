@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(test)
+project(localization)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -19,6 +19,11 @@ find_package(catkin REQUIRED COMPONENTS
   OpenCV
   octomap_server
   octomap_msgs
+  geometry_msgs
+  tf2
+  tf2_ros
+  tf2_sensor_msgs
+  tf2_geometry_msgs
   )
   
 ## System dependencies are found with CMake's conventions
@@ -144,6 +149,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(testPCL src/test.cpp)
+add_executable(corner_detect src/corner_detect.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -158,6 +164,9 @@ add_executable(testPCL src/test.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(testPCL
   ${catkin_LIBRARIES} ${OpenCv_LIBS} ${PCL_LIBRARIES}
+)
+target_link_libraries(corner_detect
+  ${catkin_LIBRARIES} ${OpenCv_LIBS}
 )
 
 #############
