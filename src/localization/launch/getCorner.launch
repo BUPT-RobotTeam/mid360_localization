@@ -3,6 +3,6 @@
     <param name="input_topic" value="/cloud_registered" />
     <param name="detect_duration" value="200" />
     <param name="z_min" value="0.05" />
-    <param name="z_max" value="0.2" />
-    <node name="test" pkg="test" type="testPCL" output="screen"/>
+    <param name="z_max" value="0.5" />
+    <node name="test" pkg="localization" type="testPCL" output="screen"/>
 </launch>

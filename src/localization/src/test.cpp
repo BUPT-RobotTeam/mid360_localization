@@ -169,10 +169,10 @@ private:
         // RadiusOutlierFilter(pts_ptr, 0.1, 5);
 
         for (const auto &pt : pts_ptr->points) {
-            // ROS_INFO("PT Write in. %f %f %f", pt.x, pt.y, pt.z);
             if (pt.z < z_min || pt.z > z_max){
                 continue;
             }
+            ROS_INFO("PT Write in. %f %f", pt.x, pt.y);
             octree_.updateNode(octomap::point3d(pt.x, pt.y, 0), true); //转为栅格地图
         }
         
@@ -188,7 +188,7 @@ private:
         }
         cv::imshow("Octomap", img);
         // cv::imwrite("oc.png", img);
-        cv::imwrite("/home/yin/trash_ws/ooop.png", img);
+        cv::imwrite("/home/yin/trash_ws/op.png", img);
 
         cv::waitKey(10);
         // PublishOctomapAsOccupancyGrid();

@@ -2,6 +2,7 @@
 #include "geometry_msgs/Transform.h"
 #include "geometry_msgs/TransformStamped.h"
 #include "ros/init.h"
+#include <cmath>
 #include <cstddef>
 #include <iostream>
 #include <opencv2/core/hal/interface.h>
@@ -29,8 +30,8 @@ int main(int argc, char **argv)
         ROS_ERROR("Image not found");
         return -1;
     }
-    cv::Mat open_kernel = cv::Mat::ones(5, 5, CV_8U);
-    cv::morphologyEx(img, img, cv::MORPH_OPEN, open_kernel);
+    cv::Mat close_kernel = cv::Mat::ones(2, 2, CV_8U);
+    // cv::morphologyEx(img, img, cv::MORPH_CLOSE, close_kernel);
     // cv::GaussianBlur(img, img, cv::Size(5, 5),1);
     cv::Canny(img, img, 100, 200);
     std::vector<std::vector<cv::Point>> contours;
@@ -41,6 +42,9 @@ int main(int argc, char **argv)
     for (auto &contour : contours){
         std::vector<cv::Point> approx;
         cv::approxPolyDP(contour, approx, 3, true);
+        if (cv::contourArea(approx) < 5){
+            continue;
+        }
         contours_poly.push_back(approx);
         // for (const auto &point : approx){
         //     cv::circle(img, point, 2, 255, 1);
@@ -51,6 +55,7 @@ int main(int argc, char **argv)
     std::vector<cv::Point> corners;
     std::vector<cv::Vec4b> lines;
     for (const auto & contour : contours_poly){
+
         for (size_t i = 0; i < contour.size(); i++){
             // cv::line(img, contour[i], contour[(i+1)%contour.size()], 255, 1);
             int i2 = (i+1)%contour.size();
@@ -91,8 +96,9 @@ int main(int argc, char **argv)
     transformStamped.transform.translation.x = pt.x;
     transformStamped.transform.translation.y = pt.y;
     transformStamped.transform.translation.z = 0.0;
-    double yaw_angle = atan2(line[3] - line[1], line[2] - line[0]);
-    transformStamped.transform.rotation = tf::createQuaternionMsgFromYaw(yaw_angle);  // 90度旋转
+    double yaw_angle = std::fabs(atan2(line[3] - line[1], line[2] - line[0]));
+    yaw_angle = line[3] > line[1] ? yaw_angle : -yaw_angle;
+    transformStamped.transform.rotation = tf::createQuaternionMsgFromYaw(yaw_angle);  // 90度逆时针旋转
 
     cv::imshow("image", img_contours);
     cv::imshow("img", img);
