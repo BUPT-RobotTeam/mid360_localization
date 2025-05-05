@@ -130,7 +130,12 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
+  /home/yin/my_libs/mosek/11.0/tools/platform/linux64x86/h
   ${catkin_INCLUDE_DIRS}
+)
+
+link_directories(
+  /home/yin/my_libs/mosek/11.0/tools/platform/linux64x86/bin
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -166,7 +171,7 @@ target_link_libraries(testPCL
   ${catkin_LIBRARIES} ${OpenCv_LIBS} ${PCL_LIBRARIES}
 )
 target_link_libraries(corner_detect
-  ${catkin_LIBRARIES} ${OpenCv_LIBS}
+  ${catkin_LIBRARIES} ${OpenCv_LIBS} mosek64
 )
 
 #############
